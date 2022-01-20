@@ -8,16 +8,19 @@ import distro
 from hurry.filesize import size,si
 from time import sleep
 if platform.system() == "Windows":
-    import win32serviceutil
+    #import win32serviceutil
+    sleep(0)
 else:
     winno = True
 class App:
     def handle(self):
-        if winno != True:
+        """Handles And Sends JSON."""
+        """"if winno != True:
             for i in self.servres:
                 if self.servres[i] <2:
                     self.status = "ST_MSG"
                     self.msg = "Serv. Restart 3."
+        """
         if self.status == "ST_MSG":
             self.data = {"STATUS":"ST_MSG","MSG0":self.msg[0],"MSG1":self.msg[1]}
             self.sendJSON()
@@ -33,15 +36,15 @@ class App:
     useEmu = True
     data = {}
     msg = ()
-    argv = {}
+    argv = {"ser":["time"]}
     servres = {}
-    def connect(self):
+    """def connect(self):
         if not winno:
             for i in self.argv["ser"]:
                 if win32serviceutil.QueryServiceStatus(self.argv["ser"][i],None) != win32serviceutil.SERVICE_RUNNING:
                     win32serviceutil.RestartService(self.argv["ser"][i])
                     self.servres[self.argv["ser"][i]] = self.servres[self.argv["ser"][i]] + 1
-            
+    """        
     def sendJSON(self):
         if self.useEmu:
             DispEmu.parseJSON(self.data,self.status)
@@ -96,7 +99,7 @@ class DispEmc:
             input()
 DispEmu = DispEmc()
 ss = App()
-ss.connect()
 while True:
+    ss.connect()
     ss.handle()
     sleep(0.5)
